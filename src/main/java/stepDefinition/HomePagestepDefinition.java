@@ -29,12 +29,6 @@ import cucumber.api.java.en.When;
 public class HomePagestepDefinition {
 
 	 WebDriver driver;
-	// following data is saved in Excel sheet and will be getting data by reading excel sheet 
-	public static  String URL="https://www.makemytrip.com/";
-	public static String source="Hyderabad";
-	public String destination="Bangalore";
-	public int xDays=30;
-	
 	
 @Given("^launch make my trip application and user is on Home page$")
 public void launch_make_my_trip_application_and_user_is_on_Home_page() throws InterruptedException {
@@ -45,19 +39,19 @@ public void launch_make_my_trip_application_and_user_is_on_Home_page() throws In
 	Thread.sleep(4000);
 }
 
-@When("^user enters source and destination city$")
-public void user_enters_sorce_and_destination_city(){
+@When("^user enters \"(.*)\" and \"(.*)\" city$")
+public void user_enters_sorce_and_destination_city(String source,String desti) throws InterruptedException{
 
-	new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='gosuggest_inputSrc']"))).sendKeys("San");
-	List<WebElement> source = new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"react-autosuggest-1\"]")));
-	for (WebElement element : source) {
+	new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='gosuggest_inputSrc']"))).sendKeys(source);
+	List<WebElement> fromCity = new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"react-autosuggest-1\"]")));
+	for (WebElement element : fromCity) {
 	if (element.getText().contains("San Francisco"));
 	element.click();
 }
 
-	new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='gosuggest_inputDest']"))).sendKeys("Jfk");
-	List<WebElement> dest = new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"react-autosuggest-1\"]")));
-	for (WebElement element : dest) {
+	new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='gosuggest_inputDest']"))).sendKeys(desti);
+	List<WebElement> ToCity = new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"react-autosuggest-1\"]")));
+	for (WebElement element : ToCity) {
 	if (element.getText().contains("Denver"));
 	element.click();
 }
@@ -66,7 +60,7 @@ public void user_enters_sorce_and_destination_city(){
 	driver.findElement(By.xpath("//span[@class='DayPicker-NavButton DayPicker-NavButton--next']")).click();
 	driver.findElement(By.xpath("//div[@class='DayPicker-Week'][4]//div[4]")).click();
 	//driver.findElement(By.xpath("//div[@class='DayPicker-Month']")).sendKeys(HomePagestepDefinition.getFutureDateForXDays(xDays));
-	
+	Thread.sleep(2000);
 }
 
 @Then("^user searched for available flight$")
@@ -76,7 +70,7 @@ public void user_searched_for_available_flight() {
 
 @Then("^user selects the chepest flight from itinery$")
 public void user_selects_the_chepest_flight_from_itinery() {
-	driver.findElement(By.xpath("(//input[@value='BOOK'])[1]")).click();
+	driver.findElement(By.xpath("(//span[@class='db clearfix']//input[@value='BOOK'])[1]")).click();
 }
 
 
